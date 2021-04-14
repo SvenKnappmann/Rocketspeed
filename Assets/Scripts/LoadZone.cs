@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class LoadZone : MonoBehaviour
 {
+    public Transform gateA;
+    public Transform gateB;
 
+    public bool zone1;
+    public bool zone2;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,9 +22,21 @@ public class LoadZone : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.transform.tag == "Player")
+        if (zone1)
         {
-
+            if (collision.gameObject.transform.tag == "Player")
+            {
+                gateA.transform.position = new Vector2(95,120);
+                gateB.transform.position = new Vector2(-25,-20);
+            }
+        }
+        else if (zone2)
+        {
+            if (collision.gameObject.transform.tag == "Player")
+            {
+                gateA.transform.position = new Vector2(83.264f, 308.96f);
+                gateB.transform.position = new Vector2(-25, -20);
+            }
         }
     }
 }
