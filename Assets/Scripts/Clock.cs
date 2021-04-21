@@ -10,7 +10,7 @@ public class Clock : MonoBehaviour
     public Text secondsText;
     public Text minutesText;
 
-    private float timer = 600f; // 10min
+    private float timer = 360f; 
     public int miliSeconds = 0;
     public int seconds = 0;
     public int minutes = 10;
@@ -31,5 +31,9 @@ public class Clock : MonoBehaviour
         miliSecondsText.text = miliSeconds.ToString("000");
         secondsText.text = seconds.ToString("00");
         minutesText.text = minutes.ToString("00");
+        if (timer <= 0f)
+        {
+            GetComponent<LoadScene>().LoadGameOverScene();
+        }
     }
 }

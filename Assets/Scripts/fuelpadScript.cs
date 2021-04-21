@@ -20,6 +20,7 @@ public class fuelpadScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //animates fuelpad
         if (animate)
         {
             timer += Time.deltaTime;
@@ -37,7 +38,7 @@ public class fuelpadScript : MonoBehaviour
             }
         }
     }
-
+    //Detects if player is standing on fuelpad
     private void OnTriggerEnter2D(Collider2D collision)
     {
        if(collision.gameObject.transform.tag == "Player")
@@ -47,7 +48,7 @@ public class fuelpadScript : MonoBehaviour
         }
     }
 
-
+    //Detects if player is going off fuelpad
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.transform.tag == "Player")

@@ -22,10 +22,13 @@ public class LoadZone : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // Detects the gate
         if (zone1)
         {
+            // Detects if the player is standing on the fuelpad
             if (collision.gameObject.transform.tag == "Player")
             {
+                //Swaps places of gates
                 gateA.transform.position = new Vector2(95,120);
                 gateB.transform.position = new Vector2(-25,-20);
             }

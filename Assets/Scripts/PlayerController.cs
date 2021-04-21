@@ -5,54 +5,126 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    //Components
     public Rigidbody2D rigidbodyPlayer;
+    public LayerMask layerCanJump;
+    public SpriteRenderer spriteRenderer;
+    public ParticleSystem particleSystem;
 
-    private float horizontal;
-    private bool jump;
-    public bool shift;
-    public float zoomIn;
-    public float zoomOut;
-    public float zoomCamera = 10f;
+    //Variables
 
-    public float jumpHeight;
-    public float movementspeed;
+    //Active
+    //Floats/ints
+    private int fuelPercentage;
+    private float fuel = 0f;
+    private float animTimer = 0f;
+    private float spriteSprintModifier = 0f;
+    //Bools
+    public bool isOnFuel = false;
+    private bool fallSound = true;
+
+    //Static
+    private float jumpHeight = 500f;
+    private float zoomCamera = 10.5f;
     private float sprintMovementSpeed = 7.5f;
     private float walkMovementSpeed = 5f;
-
-
-    public LayerMask layerCanJump;
-    public Transform characterBody;
+    private float movementspeed = 5f;
     private float jumpFromFeet = 3f;
-    public bool isOnFuel = false;
 
+
+    //Input
+    //Axis
+    private float horizontal;
+    private float zoomIn;
+    private float zoomOut;
+    //Buttons
+    private bool jump;
+    private bool shift;
+
+
+
+    //Strings
     public Text errorMessage;
     public Text fuelMessage;
-    public int fuelPercentage;
 
+    //Audio
+    //Scource
     public AudioSource soundBox;
+    //Clips
     public AudioClip jumpSound;
-    public AudioClip rocketSprintSound;
+    public AudioClip rocketJumpSound;
     public AudioClip jumpLandingSound;
-    private bool fallSound = true;
-    public float fuel = 0;
+
+
+    //Sprites
+    public Sprite sprite0;
+    public Sprite sprite1;
+    public Sprite sprite2;
+    public Sprite sprite3;
+    public Sprite sprite4;
+    public Sprite sprite5;
+    public Sprite sprite6;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        jumpFromFeet = characterBody.localScale.y / 2 + 0.05f;
+        jumpFromFeet = 2 / 2 + 0.05f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Gets all axis/buttons
         horizontal = Input.GetAxis("Horizontal");
         jump = Input.GetButtonDown("Jump");
         shift = Input.GetButton("Shift");
         zoomIn = Input.GetAxis("ZoomIn");
         zoomOut = Input.GetAxis("ZoomOut");
+        //adds movement
         Vector2 horizontalspeed = horizontal * movementspeed * Vector2.right;
         rigidbodyPlayer.velocity = new Vector2(horizontalspeed.x, rigidbodyPlayer.velocity.y);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, jumpFromFeet, layerCanJump);
+
+        // Animations for the player character
+        animTimer += Time.deltaTime * spriteSprintModifier;
+        // Is Not moving
+        if (horizontal == 0)
+        {
+            spriteRenderer.sprite = sprite0;
+        }
+        else if (horizontal > 0)
+        {
+            //Goes right
+            if (hit.collider == null)
+            {
+                spriteRenderer.sprite = sprite3;
+            }
+            else if (animTimer % 0.5f < 0.25f)
+            {
+                spriteRenderer.sprite = sprite1;
+            }
+            else if (animTimer % 0.5f >= 0.25f)
+            {
+                spriteRenderer.sprite = sprite2;
+            }
+        }
+        else if (horizontal < 0)
+        {
+            //Goes left
+            if (hit.collider == null)
+            {
+                spriteRenderer.sprite = sprite6;
+            }
+            else if (animTimer % 0.5f < 0.25f)
+            {
+                spriteRenderer.sprite = sprite4;
+            }
+            else if (animTimer % 0.5f >= 0.25f)
+            {
+                spriteRenderer.sprite = sprite5;
+            }
+        }
 
         //Resets error message on fuelpad
         if (fuel >= 1)
@@ -61,12 +133,27 @@ public class PlayerController : MonoBehaviour
         }
 
         //Sprint
-
+        if (Input.GetButtonDown("Shift") && fuel > 0)
+        {
+            particleSystem.Play();
+        }
+        else if (Input.GetButtonUp("Shift") || fuel <= 0)
+        {
+            particleSystem.Stop();
+        }
         // SprintBoost
         if (shift && fuel > 0)
         {
             movementspeed = sprintMovementSpeed;
-            fuel -= 0.25f * Time.deltaTime;
+            spriteSprintModifier = 1.5f;
+            if (fuel > 0.25f * Time.deltaTime)
+            {
+                fuel -= 0.25f * Time.deltaTime;
+            }
+            else
+            {
+                fuel = 0;
+            }
         }
         // Try to Sprint
         else if (shift && fuel <= 0)
@@ -77,6 +164,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             movementspeed = walkMovementSpeed;
+            spriteSprintModifier = 1f;
         }
 
         //Zoom
@@ -107,7 +195,7 @@ public class PlayerController : MonoBehaviour
             // Jump with boost
             if (jump && shift && fuel >= 1)
             {
-                soundBox.clip = rocketSprintSound;
+                soundBox.clip = rocketJumpSound;
                 soundBox.Play();
                 rigidbodyPlayer.AddForce(Vector2.up * jumpHeight * 2);
                 fuel -= 1;
@@ -125,12 +213,15 @@ public class PlayerController : MonoBehaviour
                 rigidbodyPlayer.AddForce(Vector2.up * jumpHeight);
             }
         }
+        // enables the fallsound for when you land
         if (hit.collider == null)
         {
             fallSound = true;
         }
+        //Rounds down the fuel level
         fuelPercentage = (int)Mathf.Floor(fuel);
         fuelMessage.text = fuelPercentage.ToString("00");
+        // Adds fuel if you are on a fuelpad
         if (isOnFuel && fuel < 10)
         {
             fuel += Time.deltaTime;

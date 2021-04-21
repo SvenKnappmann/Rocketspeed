@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 public class ExitGame : MonoBehaviour
 {
     public AudioSource click;
+    // Exits game
     public void Exit()
     {
-        Application.Quit();
         click.Play();
+        Application.Quit();
     }
 }
