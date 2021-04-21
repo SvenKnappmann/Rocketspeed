@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask layerCanJump;
     public SpriteRenderer spriteRenderer;
     public ParticleSystem particleSystem;
+    public Canvas canvas0;
+    public Canvas canvas1;
+    public Component timer;
 
     //Variables
 
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour
     //Bools
     public bool isOnFuel = false;
     private bool fallSound = true;
+    private bool escaped = false;
 
     //Static
     private float jumpHeight = 500f;
@@ -40,6 +44,7 @@ public class PlayerController : MonoBehaviour
     //Buttons
     private bool jump;
     private bool shift;
+    private bool escape;
 
 
 
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         jumpFromFeet = 2 / 2 + 0.05f;
+        canvas1.enabled = false;
     }
 
     // Update is called once per frame
@@ -81,6 +87,7 @@ public class PlayerController : MonoBehaviour
         shift = Input.GetButton("Shift");
         zoomIn = Input.GetAxis("ZoomIn");
         zoomOut = Input.GetAxis("ZoomOut");
+        escape = Input.GetButtonUp("Escape");
         //adds movement
         Vector2 horizontalspeed = horizontal * movementspeed * Vector2.right;
         rigidbodyPlayer.velocity = new Vector2(horizontalspeed.x, rigidbodyPlayer.velocity.y);
@@ -132,99 +139,122 @@ public class PlayerController : MonoBehaviour
             errorMessage.text = "";
         }
 
+        if (escape && !escaped)
+        {
+            canvas0.enabled = false; 
+            canvas1.enabled = true;
+            timer.GetComponent<Clock>().enabled = false;
+            isOnFuel = false;
+            escaped = true;
+        }
+        else if (escape && escaped)
+        {
+            canvas0.enabled = true; 
+            canvas1.enabled = false;
+            timer.GetComponent<Clock>().enabled = true;
+            isOnFuel = true;
+            escaped = false;
+        }
         //Sprint
-        if (Input.GetButtonDown("Shift") && fuel > 0)
+        if (!escaped)
         {
-            particleSystem.Play();
-        }
-        else if (Input.GetButtonUp("Shift") || fuel <= 0)
-        {
-            particleSystem.Stop();
-        }
-        // SprintBoost
-        if (shift && fuel > 0)
-        {
-            movementspeed = sprintMovementSpeed;
-            spriteSprintModifier = 1.5f;
-            if (fuel > 0.25f * Time.deltaTime)
+            //Particles
+            if (Input.GetButtonDown("Shift") && fuel > 0)
             {
-                fuel -= 0.25f * Time.deltaTime;
+                particleSystem.Play();
             }
-            else
+            else if (Input.GetButtonUp("Shift") || fuel <= 0)
             {
-                fuel = 0;
+                particleSystem.Stop();
             }
-        }
-        // Try to Sprint
-        else if (shift && fuel <= 0)
-        {
-            errorMessage.text = "no fuel";
-        }
-        // Walk normal
-        else
-        {
-            movementspeed = walkMovementSpeed;
-            spriteSprintModifier = 1f;
-        }
-
-        //Zoom
-        if (zoomOut == 1 && zoomCamera <= 10.5f)
-        {
-            zoomCamera += 2.5f * Time.deltaTime;
-            Camera.main.orthographicSize = zoomCamera;
-        }
-        else if (zoomIn == 1 && zoomCamera >= -10.5f)
-        {
-            zoomCamera -= 2.5f * Time.deltaTime;
-            Camera.main.orthographicSize = zoomCamera;
-        }
-
-        // Checks if you are on ground
-        if (hit.collider != null)
-        {
-            // fallsound
-            if (fallSound)
+            // SprintBoost
+            if (shift && fuel > 0)
             {
-                soundBox.clip = jumpLandingSound;
-                soundBox.Play();
-                fallSound = false;
+                movementspeed = sprintMovementSpeed;
+                spriteSprintModifier = 1.5f;
+                if (fuel > 0.25f * Time.deltaTime)
+                {
+                    fuel -= 0.25f * Time.deltaTime;
+                }
+                else
+                {
+                    fuel = 0;
+                }
             }
-
-            //Jump
-
-            // Jump with boost
-            if (jump && shift && fuel >= 1)
-            {
-                soundBox.clip = rocketJumpSound;
-                soundBox.Play();
-                rigidbodyPlayer.AddForce(Vector2.up * jumpHeight * 2);
-                fuel -= 1;
-            }
-            // Try to jump with boost
-            else if (jump && shift && fuel < 1)
+            // Try to Sprint
+            else if (shift && fuel <= 0)
             {
                 errorMessage.text = "no fuel";
             }
-            // Jump without boost
-            else if (jump && !shift)
+            // Walk normal
+            else
             {
-                soundBox.clip = jumpSound;
-                soundBox.Play();
-                rigidbodyPlayer.AddForce(Vector2.up * jumpHeight);
+                movementspeed = walkMovementSpeed;
+                spriteSprintModifier = 1f;
+            }
+
+            //Zoom
+            if (zoomOut == 1 && zoomCamera <= 10.5f)
+            {
+                zoomCamera += 2.5f * Time.deltaTime;
+                Camera.main.orthographicSize = zoomCamera;
+            }
+            else if (zoomIn == 1 && zoomCamera >= -10.5f)
+            {
+                zoomCamera -= 2.5f * Time.deltaTime;
+                Camera.main.orthographicSize = zoomCamera;
+            }
+
+            // Checks if you are on ground
+            if (hit.collider != null)
+            {
+                // fallsound
+                if (fallSound)
+                {
+                    soundBox.clip = jumpLandingSound;
+                    soundBox.Play();
+                    fallSound = false;
+                }
+
+                Jump();
+                
+            }
+            // enables the fallsound for when you land
+            if (hit.collider == null)
+            {
+                fallSound = true;
+            }
+            //Rounds down the fuel level
+            fuelPercentage = (int)Mathf.Floor(fuel);
+            fuelMessage.text = fuelPercentage.ToString("00");
+            // Adds fuel if you are on a fuelpad
+            if (isOnFuel && fuel < 10)
+            {
+                fuel += Time.deltaTime;
             }
         }
-        // enables the fallsound for when you land
-        if (hit.collider == null)
+    }
+
+    private void Jump()
+    {
+        if (jump && shift && fuel >= 1)
         {
-            fallSound = true;
+            soundBox.clip = rocketJumpSound;
+            soundBox.Play();
+            rigidbodyPlayer.AddForce(Vector2.up * jumpHeight * 2);
+            fuel -= 1;
         }
-        //Rounds down the fuel level
-        fuelPercentage = (int)Mathf.Floor(fuel);
-        fuelMessage.text = fuelPercentage.ToString("00");
-        // Adds fuel if you are on a fuelpad
-        if (isOnFuel && fuel < 10)
+        // Try to jump with boost
+        else if (jump && shift && fuel < 1)
         {
-            fuel += Time.deltaTime;
+            errorMessage.text = "no fuel";
+        }
+        // Jump without boost
+        else if (jump && !shift)
+        {
+            soundBox.clip = jumpSound;
+            soundBox.Play();
+            rigidbodyPlayer.AddForce(Vector2.up * jumpHeight);
         }
     }
 }

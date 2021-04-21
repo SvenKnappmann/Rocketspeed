@@ -15,6 +15,7 @@ public class LoadScene : MonoBehaviour
     public void LoadGameOverScene()
     {
         SceneManager.LoadScene(4);
+        click.Play();
     }
     public void LoadGameScene()
     {
