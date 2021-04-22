@@ -6,11 +6,16 @@ ScriptsOnlyBuild:
     - LoadScene
     - LoadZone
     - PlayerController
+    - SaveTime
+    - TimeLeft
+    - TriggerEnd
     - fuelpadScript
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
+    - UnityEditor.Tilemaps.GridPaletteBrushes
+    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -35,15 +40,57 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 20
       Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
     - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11266}
+    - Class: 114
+      Script: {instanceID: 11558}
+    - Class: 114
+      Script: {instanceID: 11612}
+    - Class: 114
+      Script: {instanceID: 11982}
+    - Class: 114
+      Script: {instanceID: 12208}
+    - Class: 114
+      Script: {instanceID: 12284}
+    - Class: 114
+      Script: {instanceID: 12988}
+    - Class: 114
+      Script: {instanceID: 13754}
+    - Class: 114
+      Script: {instanceID: 14366}
+    - Class: 114
+      Script: {instanceID: 14438}
+    - Class: 114
+      Script: {instanceID: 45602}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     Assets/Scenes/GameOver.unity:
     - Class: 1
@@ -73,17 +120,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11612}
     - Class: 114
-      Script: {instanceID: 12206}
+      Script: {instanceID: 12208}
     - Class: 114
-      Script: {instanceID: 12282}
+      Script: {instanceID: 12284}
     - Class: 114
-      Script: {instanceID: 12986}
+      Script: {instanceID: 12988}
     - Class: 114
-      Script: {instanceID: 13750}
+      Script: {instanceID: 13754}
     - Class: 114
-      Script: {instanceID: 14362}
+      Script: {instanceID: 14366}
     - Class: 114
-      Script: {instanceID: 14434}
+      Script: {instanceID: 14438}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -128,17 +175,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11612}
     - Class: 114
-      Script: {instanceID: 12206}
+      Script: {instanceID: 12208}
     - Class: 114
-      Script: {instanceID: 12282}
+      Script: {instanceID: 12284}
     - Class: 114
-      Script: {instanceID: 12986}
+      Script: {instanceID: 12988}
     - Class: 114
-      Script: {instanceID: 13750}
+      Script: {instanceID: 13754}
     - Class: 114
-      Script: {instanceID: 14362}
+      Script: {instanceID: 14366}
     - Class: 114
-      Script: {instanceID: 14434}
+      Script: {instanceID: 14438}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -197,17 +244,25 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11558}
     - Class: 114
-      Script: {instanceID: 12012}
+      Script: {instanceID: 11612}
     - Class: 114
-      Script: {instanceID: 12206}
+      Script: {instanceID: 11982}
     - Class: 114
-      Script: {instanceID: 12282}
+      Script: {instanceID: 12014}
     - Class: 114
-      Script: {instanceID: 12734}
+      Script: {instanceID: 12208}
     - Class: 114
-      Script: {instanceID: 13750}
+      Script: {instanceID: 12284}
     - Class: 114
-      Script: {instanceID: 14362}
+      Script: {instanceID: 12736}
+    - Class: 114
+      Script: {instanceID: 12988}
+    - Class: 114
+      Script: {instanceID: 13048}
+    - Class: 114
+      Script: {instanceID: 13754}
+    - Class: 114
+      Script: {instanceID: 14366}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -258,15 +313,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11612}
     - Class: 114
-      Script: {instanceID: 12206}
+      Script: {instanceID: 12208}
     - Class: 114
-      Script: {instanceID: 12282}
+      Script: {instanceID: 12284}
     - Class: 114
-      Script: {instanceID: 12986}
+      Script: {instanceID: 12988}
     - Class: 114
-      Script: {instanceID: 13750}
+      Script: {instanceID: 13754}
     - Class: 114
-      Script: {instanceID: 14362}
+      Script: {instanceID: 14366}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -310,7 +365,7 @@ ScriptsOnlyBuild:
     className: TMP_Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 2ede1213bf0494a83088b91c551844d5
+      Hash: 3c6c25d9d02cda9dbf7887c45ba26882
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -472,6 +527,12 @@ ScriptsOnlyBuild:
     className: PixelPerfectCamera
   - hash:
       serializedVersion: 2
+      Hash: 8eaf9ad96b500223008e1fee8de94f43
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: SaveTime
+  - hash:
+      serializedVersion: 2
       Hash: ed58152502f69e225ab71f0b0c4eb96c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -602,6 +663,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: RawImage
+  - hash:
+      serializedVersion: 2
+      Hash: 2bc5bafd136731b9a9e5e7cf02d9955b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TriggerEnd
   - hash:
       serializedVersion: 2
       Hash: 5ad4aa237d47ac2bab17bacb672edf7a
@@ -806,6 +873,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 2bc5bafd136731b9a9e5e7cf02d9955b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TimeLeft
   platform: 5
   scenePathNames:
   - Assets/Scenes/Title.unity
@@ -813,4 +886,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Main.unity
   - Assets/Scenes/End Scene.unity
   - Assets/Scenes/GameOver.unity
-  playerPath: C:/Users/Svenn/Desktop/Rocketspeed.exe
+  playerPath: C:/Games/Rocketspeed/Rocketspeed.exe

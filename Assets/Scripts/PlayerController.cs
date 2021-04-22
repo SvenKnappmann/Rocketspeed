@@ -260,6 +260,19 @@ public class PlayerController : MonoBehaviour
             spriteSprintModifier = 1f;
         }
     }
+    private void Zoom()
+    {
+        if (zoomOut == 1 && zoomCamera <= 10.5f)
+        {
+            zoomCamera += 2.5f * Time.deltaTime;
+            Camera.main.orthographicSize = zoomCamera;
+        }
+        else if (zoomIn == 1 && zoomCamera >= -10.5f)
+        {
+            zoomCamera -= 2.5f * Time.deltaTime;
+            Camera.main.orthographicSize = zoomCamera;
+        }
+    }
     private void Jump()
     {
         // Try to jump with boost
@@ -282,19 +295,6 @@ public class PlayerController : MonoBehaviour
             soundBox.clip = jumpSound;
             soundBox.Play();
             rigidbodyPlayer.AddForce(Vector2.up * jumpHeight);
-        }
-    }
-    private void Zoom()
-    {
-        if (zoomOut == 1 && zoomCamera <= 10.5f)
-        {
-            zoomCamera += 2.5f * Time.deltaTime;
-            Camera.main.orthographicSize = zoomCamera;
-        }
-        else if (zoomIn == 1 && zoomCamera >= -10.5f)
-        {
-            zoomCamera -= 2.5f * Time.deltaTime;
-            Camera.main.orthographicSize = zoomCamera;
         }
     }
 }

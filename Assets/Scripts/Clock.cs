@@ -23,6 +23,10 @@ public class Clock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Converter();
+    }
+    private void Converter()
+    {
         timer -= Time.deltaTime;
         miliSeconds = (int)Mathf.Floor((timer % 1) * 1000);
         seconds = (int)Mathf.Floor(timer % 60);
