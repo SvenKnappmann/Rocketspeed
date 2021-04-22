@@ -10,7 +10,7 @@ public class Clock : MonoBehaviour
     public Text secondsText;
     public Text minutesText;
 
-    private float timer = 360f; 
+    private float timer = 450f; 
     public int miliSeconds = 0;
     public int seconds = 0;
     public int minutes = 10;

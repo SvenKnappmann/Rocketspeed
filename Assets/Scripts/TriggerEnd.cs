@@ -25,7 +25,7 @@ public class TriggerEnd : MonoBehaviour
         {
             toggle = true;
             saveTime.WriteString();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene(3);
         }
     }
 }
